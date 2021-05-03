@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <title> datos </title>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+
+  <body>
+
+    <button id="botonCsv" onclick="mostrarTablaCSV()"> datos de archivo .csv </button>
+    <button id="botonJSon" onclick="mostrarTablaJSON()"> datos de archivo .json </button>
+
+    <table id="informacionSolicitadaTrigo" class="table table-striped" style="display: none">
+      <tr>
+        <th>indice_tiempo</th>
+        <th>superficie_sembrada_trigo_ha </th>
+        <th>superficie_cosechada_trigo_ha</th>
+        <th>produccion_trigo_t</th>
+        <th>rendimiento_trigo_kgxha</th>
+      </tr>
+
+    </table>
+
+    <table id="informacionSolicitadamunicipios" class="table table-striped" style="display: none">
+      <tr>
+        <th>nombre_completo</th>
+        <th>fuente </th>
+        <th>nombre</th>
+        <th>id</th>
+        <th>provincia</th>
+        <th>categoria</th>
+        <th>centroide</th>
+      </tr>
+
+    </table>
+
+    <script>
+
+      function mostrarTablaCSV(){
+
+        $("#botonCsv").hide();
+        $("#botonJSon").hide();
+
+        $.ajax({
+          url: "http://localhost:8080/api/datos/csv",
+          type: 'GET'
+        })
+                .done(function (data) {
+
+                  console.log(data);
+
+                  let datos = data.trigos;
+                  let contenido = "";
+                  for (var i = 0; i < datos.length; i++){
+                    contenido = "<tr>\n";
+                    contenido += "<td>" + datos[i].indice_tiempo + "</td>";
+                    contenido += "<td>" + datos[i].superficie_sembrada_trigo_ha  + "</td>";
+                    contenido += "<td>" + datos[i].superficie_cosechada_trigo_ha+ "</td>";
+                    contenido += "<td>" + datos[i].produccion_trigo_t + "</td>";
+                    contenido += "<td>" + datos[i].rendimiento_trigo_kgxha + "</td>";
+
+                    $("#informacionSolicitadaTrigo").append(contenido);
+                  }
+
+                  $("#informacionSolicitadaTrigo").show();
+
+
+                })
+                .fail(function () {
+                  console.log("error, no se pudo obtener datos");
+                });
+      }
+
+      function mostrarTablaJSON() {
+
+        $("#botonCsv").hide();
+        $("#botonJSon").hide();
+
+        $.ajax({
+          url: "http://localhost:8080/api/datos/json",
+          type: 'GET'
+        })
+                .done(function (data) {
+
+                  let datos = data.municipios;
+                  let contenido = "";
+                  for (var i = 0; i < datos.length; i++){
+                    contenido = "<tr>\n";
+                    contenido += "<td>" + datos[i].nombre_completo + "</td>";
+                    contenido += "<td>" + datos[i].fuente + "</td>";
+                    contenido += "<td>" + datos[i].nombre + "</td>";
+                    contenido += "<td>" + datos[i].id + "</td>";
+                    contenido += "<td>" + datos[i].provincia + "</td>";
+                    contenido += "<td>" + datos[i].categoria + "</td>";
+                    contenido += "<td>" + datos[i].centroide + "</td>";
+
+                    $("#informacionSolicitadamunicipios").append(contenido);
+                  }
+
+                  $("#informacionSolicitadamunicipios").show();
+
+                })
+                .fail(function () {
+                  console.log("error, no se pudo obtener datos");
+                });
+      }
+
+    </script>
+
+  </body>
+
+</html>
