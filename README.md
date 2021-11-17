@@ -1,7 +1,7 @@
 
 # 🤠 Taller de Soporte Informartico 🤠
 
-##Alumno:Tobias Rodriguez
+## Alumno:Tobias Rodriguez
 ## Profesora:Nadia Noemi Matias Colque
 😀
 
